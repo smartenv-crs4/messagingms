@@ -1,0 +1,32 @@
+{
+  "name": "messaging-ms",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "/usr/local/n/versions/node/6.2.0/bin/node ./bin/www"
+  },
+  "author": {
+    "name": "Davide Muroni",
+    "email": "dmuroni@crs4.it"
+  },
+  "dependencies": {
+    "async": "^2.5.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "~1.15.1",
+    "debug": "~2.2.0",
+    "express": "^4.13.4",
+    "express-boom": "^1.0.0",
+    "joi": "^10.0.1",
+    "joi-objectid": "^2.0.0",
+    "joigoose": "^1.5.7",
+    "minimist": "^1.2.0",
+    "mongoose": "^4.5.5",
+    "mongoose-paginate": "^5.0.0",
+    "morgan": "~1.7.0",
+    "propertiesmanager": "^1.0.4",
+    "request": "^2.83.0",
+    "socket.io": "^1.5.1",
+    "tokenmanager": "^1.0.24",
+    "underscore": "^1.8.3"
+  }
+}

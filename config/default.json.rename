@@ -1,0 +1,15 @@
+{
+  "production": {
+    "dbHost":"your_db_host",
+    "dbPort":"27017",
+    "dbName":"messages",
+    "enableCors":true,
+    "authProtocol":"http",
+    "authHost":"your_auth_service_host",
+    "authPort":"3000",
+    "apiGwAuthBaseUrl":"",
+    "apiVersion":"",
+    "auth_token":"your_auth_service_token",
+    "decodedTokenFieldName": "messagingdms"
+  }
+}
