@@ -127,11 +127,105 @@ router.get('/messages/:room', [security.authWrap], (req, res, next) => {
     "room": room 
   };
 
-  Message.find(query, "text date sender").lean().exec().then(function(result){
+  Message.find(query, "text date sender room").lean().exec().then(function(result){
     return res.send(result);
   });
 
   
 });
+
+/**
+ * @api {get} /message/:id Return a specific message
+ * @apiGroup Messaging
+ *
+ * @apiDescription Retrieves a message identified by a specific id.
+ * #apiParam  {String} id  The message identifier.
+ *
+ * @apiSuccess (200) {Object} body A JSON containing the requested message
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *           "_id": "59e9be1da6b290663a3e1e18",
+ *           "text": "What's up ?",
+ *           "date": "2016-10-31 10:51:58.203Z"
+ *           "sender": "57f50b37e8094b7137fa3efe",
+ *           "room" : "r1"
+ *     }
+ */
+router.get('/message/:id', [security.authWrap], (req, res, next) => {
+  let id = req.params.id;
+
+  if(!id) 
+    return res.boom.badRequest("Missing id");
+
+  if(!require("mongoose").Types.ObjectId.isValid(id))
+    return res.boom.badRequest("Invalid message id")
+
+  Message.findById(id).lean().exec().then(function(result){
+    if (_.isEmpty(result))
+      return res.boom.notFound('No message with id ' + id); // Error 404
+
+    return res.send(result);
+  }); 
+});
+
+
+/**
+ * @api {get} /messages?id= Return a group of messages
+ * @apiGroup Messaging
+ *
+ * @apiDescription Retrieves messages identified by ids.
+ * #apiParam  {String} id  A list of messages identifiers.
+ *
+ * @apiSuccess (200) {Object} body A JSON containing the requested messages
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       [
+ *         {
+ *           "text": "What's up ?",
+ *           "date": "2016-10-31 10:51:58.203Z"
+ *           "sender": "57f50b37e8094b7137fa3efe",
+ *           "room" : "r1"
+ *         }, 
+ *         {
+ *           "text": "I'm ok",
+ *           "date": "2016-10-31 10:52:07.101Z"
+ *           "sender": "57f51c1be8094b7137fa3f04",
+ *           "room" : "r1"
+ *         }
+ *       ]
+ *     }
+ *
+ */
+router.get('/messages', [security.authWrap], (req, res, next) => {
+  let ids = req.query.id;
+
+  if(!ids) 
+    return res.boom.badRequest("Missing id");
+
+  var arrId = [];
+  if(!Array.isArray(ids))
+    ids = [ids];
+
+  for(i in ids)
+  {
+    if(!require("mongoose").Types.ObjectId.isValid(ids[i]))
+      return res.boom.badRequest("Invalid message id")
+   
+    arrId.push(require("mongoose").Types.ObjectId(ids[i]));
+  }
+
+  
+  Message.find({"_id" : {$in: arrId}}).lean().exec().then(function(result){
+    if (_.isEmpty(result))
+      return res.boom.notFound('No message with id ' + id); // Error 404
+
+    return res.send(result);
+  }); 
+});
+
 
 module.exports = router;
