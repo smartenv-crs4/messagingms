@@ -13,7 +13,7 @@ var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
 gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
 
 auth.configure({
-  authorizationMicroserviceUrl:config.authProtocol + "://" + config.authHost + ":" + config.authPort + gwBase + '/tokenactions/checkiftokenisauth',
+  authorizationMicroserviceUrl:config.authUrl + gwBase + '/tokenactions/checkiftokenisauth',
   decodedTokenFieldName: authField,
   authorizationMicroserviceToken: config.auth_token
 })
