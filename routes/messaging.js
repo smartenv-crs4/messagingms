@@ -53,6 +53,7 @@ router.post('/message', [security.authWrap], (req, res, next) => {
   let text = req.body.text;
   let room = req.body.room;
   let sender = req.body.sender;
+  let aux = req.body.aux;
 
   if(!text)
     return res.boom.badRequest("Missing message text");
@@ -67,6 +68,9 @@ router.post('/message', [security.authWrap], (req, res, next) => {
   if(sender)
     msg.sender = sender;
 
+  if(aux)
+    msg.aux = aux;
+
   Message.create(msg).then(function(entities){
     if (_.isEmpty(entities))
     {
@@ -75,7 +79,7 @@ router.post('/message', [security.authWrap], (req, res, next) => {
     }
     else
     {
-      req.app.get("socketio").to(room).emit("message", text);
+      req.app.get("socketio").to(room).emit("message", entities);
       return res.status(201).send(entities); // HTTP 201 created
     }
   }).catch(function (err) {

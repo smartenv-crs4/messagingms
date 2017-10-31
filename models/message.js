@@ -11,6 +11,7 @@ var Schema = mongoose.Schema,
 var joiMessageSchema = Joi.object({
     room: Joi.string().required(),
     text: Joi.string().required(),
+    aux: Joi.object(),
     date: Joi.date().default(Date.now, 'time of creation').required(),
     sender: Joi.string().required().meta({type: 'ObjectId', ref: 'User'}),
 });
