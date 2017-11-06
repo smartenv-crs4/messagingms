@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const boom = require('express-boom');
 const app = express();
 const messaging = require('./routes/messaging');
+const room = require('./routes/room');
 const config = require('propertiesmanager').conf;
 
 if(app.get('env') != 'test') {
@@ -33,6 +34,7 @@ if (app.get('env') === 'dev' || app.get('env') === 'test' ) {
 //routes
 app.use('/doc', express.static('doc',{root:'doc'}));
 app.use('/', messaging);
+app.use('/', room);
 
 
 // catch 404 and forward to error handler

@@ -2,6 +2,14 @@
 var debug = require('debug')('caport2020messaging-Microservice');
 var app = require('../app');
 var db = require("../models/db");
+var Room = require("../models/room").Room;
+var _ = require('underscore')._;
+var tu = require("../util/token");
+var config = require('propertiesmanager').conf;
+
+
+var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
+gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
 
 db.connect(function(err){
 
@@ -63,13 +71,71 @@ if (process.env.ENABLEHTTPS ){
 
 var io = require('socket.io')(server, { origins:'*:*', transports: ["websocket", "xhr-polling"]});
 
-io.on('connection', function(socket) {
-
-
-    socket.on('join', function(data) {
-        socket.join(data);
-    });
+io.on('connection', function(socket) 
+{
+  socket.on('join', function(data) 
+  {
+    socket.join(data);
+  });
 });
+
+
+
+io.use(function(socket, next){
+  if (socket.handshake.query && socket.handshake.query.token )
+  {
+    console.log(socket.handshake.query.token) 
+
+    tu.decodeToken(socket.handshake.query.token).then(function(result)
+    {
+      if(result.response.statusCode == 200 && result.body.valid == true)
+      {
+        var uid = result.body.token._id;
+        console.log(uid);
+
+        Room.findOne({name: socket.handshake.query.room}, "members").lean().exec().then(function(result)
+        {
+          console.log(result);
+          if(_.isEmpty(result))
+          {
+            next();
+            //next(new Error('Authentication error'));
+          }
+          else if(result.members)
+          {
+            if(result.members.indexOf(uid) > -1)
+            {
+              next();
+            }
+            else
+            {
+              next(new Error('Authentication error'));
+            } 
+          }
+        });
+      }
+      else
+      {
+        var err = new Error();
+        err.message = result.body.error_message;
+        err.statusCode = result.response.statusCode;
+        throw err;
+      }
+    }).catch(function(err)
+    {
+      console.log(err);
+      next(new Error('Authentication error'));
+    });
+
+    //next(new Error('Authentication error'));
+  }
+  else
+  {
+    next();
+  }
+});
+
+
 
 io.on('disconnect', function () {
     console.log('disconnected');

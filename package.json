@@ -1,14 +1,11 @@
 {
   "name": "messaging-ms",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "/usr/local/n/versions/node/6.2.0/bin/node ./bin/www"
+    "start": "node ./bin/www"
   },
-  "author": {
-    "name": "Davide Muroni",
-    "email": "dmuroni@crs4.it"
-  },
+  "author": "Davide Muroni <dmuroni@crs4.it>",
   "dependencies": {
     "async": "^2.5.0",
     "bluebird": "^3.5.1",
@@ -28,5 +25,17 @@
     "socket.io": "^1.5.1",
     "tokenmanager": "^1.0.24",
     "underscore": "^1.8.3"
-  }
+  },
+  "description": "Per avviare l'applicazione:",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/cp2020/messagingms.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/cp2020/messagingms/issues"
+  },
+  "homepage": "https://gitlab.com/cp2020/messagingms#README"
 }
