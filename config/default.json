@@ -5,9 +5,7 @@
     "dbName":"port_messaging",
     "enableCors":true,
     "authProtocol":"http",
-    "authUrl":"http://seidue.crs4.it",
-    "apiGwAuthBaseUrl":"/api/auth",
-    "apiVersion":"v1",
+    "authUrl":"http://seidue.crs4.it/api/auth/v1",
     "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoibXMiLCJpc3MiOiJub3QgdXNlZCBmbyBtcyIsImVtYWlsIjoibm90IHVzZWQgZm8gbXMiLCJ0eXBlIjoiYXV0aG1zIiwiZW5hYmxlZCI6dHJ1ZSwiZXhwIjoxODAxNjcxNjUwMzQzfQ.-m_CTKTIRB1GabxsKB1obHynbsNWW-RqiHSyHY10clo"
   },
   "production": {
@@ -16,9 +14,7 @@
     "dbName":"port_messaging",
     "enableCors":true,
     "authProtocol":"http",
-    "authUrl":"http://seidue.crs4.it",
-    "apiGwAuthBaseUrl":"/api/auth",
-    "apiVersion":"v1",
+    "authUrl":"http://seidue.crs4.it/api/auth/v1",
     "auth_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtb2RlIjoibXMiLCJpc3MiOiJub3QgdXNlZCBmbyBtcyIsImVtYWlsIjoibm90IHVzZWQgZm8gbXMiLCJ0eXBlIjoiYXV0aG1zIiwiZW5hYmxlZCI6dHJ1ZSwiZXhwIjoxODAxNjcxNjUwMzQzfQ.-m_CTKTIRB1GabxsKB1obHynbsNWW-RqiHSyHY10clo"
   }
 }

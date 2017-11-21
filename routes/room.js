@@ -10,11 +10,11 @@ const _ = require('underscore')._;
 var auth = require('tokenmanager');
 var authField = config.decodedTokenFieldName;
 
-var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
-gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
+//var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
+//gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
 
 auth.configure({
-  authorizationMicroserviceUrl:config.authUrl + gwBase + '/tokenactions/checkiftokenisauth',
+  authorizationMicroserviceUrl:config.authUrl  + '/tokenactions/checkiftokenisauth',
   decodedTokenFieldName: authField,
   authorizationMicroserviceToken: config.auth_token
 })

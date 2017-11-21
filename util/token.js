@@ -4,9 +4,6 @@ var config = require('propertiesmanager').conf;
 var _ = require('underscore')._;
 
 
-var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
-gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
-
 function decodeToken(token)
 {
   if (!token){
@@ -21,7 +18,7 @@ function decodeToken(token)
 
   var options =
   {
-    url:  config.authUrl + gwBase + "/tokenactions/decodeToken",
+    url:  config.authUrl + "/tokenactions/decodeToken",
     method: 'POST',
     json: true,
     body: {"decode_token" : token},

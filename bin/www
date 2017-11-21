@@ -8,9 +8,6 @@ var tu = require("../util/token");
 var config = require('propertiesmanager').conf;
 
 
-var gwBase=_.isEmpty(config.apiGwAuthBaseUrl) ? "" : config.apiGwAuthBaseUrl;
-gwBase=_.isEmpty(config.apiVersion) ? gwBase : gwBase + "/" + config.apiVersion;
-
 db.connect(function(err){
 
   if(err){
