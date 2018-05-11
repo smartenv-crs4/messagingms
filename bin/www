@@ -1,10 +1,15 @@
 #!/usr/bin/env node
-var debug = require('debug')('CP2020 analyzer microservice');
+var debug = require('debug')('caport2020messaging-Microservice');
+var app = require('../app');
 var db = require("../models/db");
-//var _ = require('underscore')._;
-//var config = require('propertiesmanager').conf;
+var Room = require("../models/room").Room;
+var _ = require('underscore')._;
+var tu = require("../util/token");
+var config = require('propertiesmanager').conf;
+
 
 db.connect(function(err){
+
   if(err){
     console.log("Unable to connect to DB, err:" +err);
   }
@@ -14,47 +19,27 @@ db.connect(function(err){
 
 });
 
-db.connectS3(function(err){
-  if(err){
-    console.log("Unable to connect to DB S3, err:" +err);
-  }
-  else{
-    console.log("Connected to DB S3");
-  }
-
-});
-
 process.on('SIGINT', function(code) {
     console.log("Exiting App...");
     db.disconnect(function(err,result){
 
-        if(err){
-            console.log('Unable to disconnect from database');
-        }
+    if(err){
+        console.log('Unable to disconnect from database');
+    }
 
-        else{
-            console.log('Disconnected from database');
-       }
+    else{
+        console.log('Disconnected from database');
+    }
 
-       db.disconnectS3(function(err,result){
 
-           if(err){
-                 console.log('Unable to disconnect from database');
-           }
-
-          else{
-                 console.log('Disconnected from database');
-          }
-
-         process.exit(0);
-      });
+    process.exit(0);
     });
+
 });
 
 
 
 
-var app = require('../app');
 app.set('port', process.env.PORT || 3010);
 var server;
 
@@ -81,4 +66,77 @@ if (process.env.ENABLEHTTPS ){
 }
 
 
+var io = require('socket.io')(server, { origins:'*:*', transports: ["websocket", "xhr-polling"]});
+
+io.on('connection', function(socket) 
+{
+  socket.on('join', function(data) 
+  {
+    socket.join(data);
+  });
+});
+
+
+
+io.use(function(socket, next){
+  if (socket.handshake.query && socket.handshake.query.token )
+  {
+    console.log(socket.handshake.query.token) 
+
+    tu.decodeToken(socket.handshake.query.token).then(function(result)
+    {
+      if(result.response.statusCode == 200 && result.body.valid == true)
+      {
+        var uid = result.body.token._id;
+        console.log(uid);
+
+        Room.findOne({name: socket.handshake.query.room}, "members").lean().exec().then(function(result)
+        {
+          console.log(result);
+          if(_.isEmpty(result))
+          {
+            next();
+            //next(new Error('Authentication error'));
+          }
+          else if(result.members)
+          {
+            if(result.members.indexOf(uid) > -1)
+            {
+              next();
+            }
+            else
+            {
+              next(new Error('Authentication error'));
+            } 
+          }
+        });
+      }
+      else
+      {
+        var err = new Error();
+        err.message = result.body.error_message;
+        err.statusCode = result.response.statusCode;
+        throw err;
+      }
+    }).catch(function(err)
+    {
+      console.log(err);
+      next(new Error('Authentication error'));
+    });
+
+    //next(new Error('Authentication error'));
+  }
+  else
+  {
+    next();
+  }
+});
+
+
+
+io.on('disconnect', function () {
+    console.log('disconnected');
+});
+
+app.set("socketio" , io);
 
