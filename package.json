@@ -22,7 +22,7 @@
     "mongoose": "^4.5.5",
     "mongoose-paginate": "^5.0.0",
     "morgan": "~1.7.0",
-    "propertiesmanager": "^2.0.3",
+    "propertiesmanager": "^1.0.4",
     "request": "^2.83.0",
     "socket.io": "^1.5.1",
     "tokenmanager": "^1.0.24",
