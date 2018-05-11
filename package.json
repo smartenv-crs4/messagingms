@@ -1,12 +1,14 @@
 {
-  "name": "messaging-ms",
+  "name": "analyzer-ms",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
-  "author": "Davide Muroni <dmuroni@crs4.it>",
+  "author": "",
   "dependencies": {
+    "ahp": "^2.1.1",
+    "apriori": "^1.0.7",
     "async": "^2.5.0",
     "bluebird": "^3.5.1",
     "body-parser": "~1.15.1",

@@ -4,9 +4,12 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const boom = require('express-boom');
 const app = express();
-const messaging = require('./routes/messaging');
-const room = require('./routes/room');
+const marketBasketAnalysis = require('./routes/marketBasketAnalysis');
+const ahp = require('./routes/ahp');
 const config = require('propertiesmanager').conf;
+const db = require("./models/db");
+
+//db.connectS3;
 
 if(app.get('env') != 'test') {
   app.use(logger('dev'));
@@ -33,8 +36,8 @@ if (app.get('env') === 'dev' || app.get('env') === 'test' ) {
 
 //routes
 app.use('/doc', express.static('doc',{root:'doc'}));
-app.use('/', messaging);
-app.use('/', room);
+app.use('/', marketBasketAnalysis);
+app.use('/', ahp);
 
 
 // catch 404 and forward to error handler
