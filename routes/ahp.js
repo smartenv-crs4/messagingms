@@ -114,19 +114,13 @@ router.post('/ahp', [security.authWrap], (req, res, next) => {
         } else {
           product_value_B = results[b].rates.bayesian_overall_rate;
         }
-        var price_A_over_B = ((8*((price_value_A/price_value_B)-(1/5)))/(5-(1/5)))+1;
+        var price_A_over_B = ((price_value_A/price_value_B)-1)/8;
         price.push([results[a]._id, results[b]._id, price_A_over_B]);
-        /*console.log('\n\n price_value_A = '+ price_value_A);
-        console.log('price_value_B = '+ price_value_B);
-        console.log('price_value_A/price_value_B '+ (price_value_A/price_value_B));
-        console.log('price_A_over_B '+ price_A_over_B);
-        */
-        //if ((price_A_over_B) > 9 || (price_A_over_B) < 1) {console.log('\n\n ===> PRIZE out of range!' + price_A_over_B);}
-        var customer_service_A_over_B = ((8*((customer_service_value_A/customer_service_value_B)-(1/5)))/(5-(1/5)))+1;
+        var customer_service_A_over_B = ((customer_service_value_A/customer_service_value_B)-1)/8;
         customer_service.push([results[a]._id, results[b]._id, customer_service_A_over_B]);
-        var delivery_A_over_B = ((8*((delivery_value_A/delivery_value_B)-(1/5)))/(5-(1/5)))+1;
+        var delivery_A_over_B = ((delivery_value_A/delivery_value_B)-1)/8;
         delivery.push([results[a]._id, results[b]._id, delivery_A_over_B]);
-        var product_A_over_B = ((8*((product_value_A/product_value_B)-(1/5)))/(5-(1/5)))+1;
+        var product_A_over_B = ((product_value_A/product_value_B)-1)/8;
         product.push([results[a]._id, results[b]._id, product_A_over_B]);
       } // end second loop
     }// end first loop
@@ -145,15 +139,8 @@ router.post('/ahp', [security.authWrap], (req, res, next) => {
         ['delivery','price',1/3],
         ]);
     var output = ahp_context.run();
-    //console.log(output);
-    //output.rankedScoreMap 
-
-    /*let analyticContext = ahp_context.debug();
-    for(let key in analyticContext){
-      console.log(`${key}: `, analyticContext[key], '\n');
-    }*/
-
-
+    console.log('output:\n');
+    console.log(output);
     return res.status(200).send("{STATUS: 'OK'}"); // HTTP 201 created
   }).catch(function(error){console.log(error);});
 
